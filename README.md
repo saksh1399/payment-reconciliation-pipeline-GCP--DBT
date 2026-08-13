@@ -2,7 +2,16 @@
 
 ## 1. Project Overview
 
+---
+    This project implements a modular payments reconciliation pipeline using
+    Google BigQuery and dbt.
+    
+    The objective is to reconcile transaction records from an internal
+    transaction ledger against bank settlement records and UPI/NPCI response
+    data.
+---
 
+```
 payment_reconciliation/
 |
 ├── models/
@@ -29,15 +38,9 @@ payment_reconciliation/
 │   └── <success_transaction_reconciliation_test>.sql
 │
 ├── dbt_project.yml
-└── README.md
+└── README.md```
 
 
-This project implements a modular payments reconciliation pipeline using
-Google BigQuery and dbt.
-
-The objective is to reconcile transaction records from an internal
-transaction ledger against bank settlement records and UPI/NPCI response
-data.
 
 The pipeline identifies:
 
