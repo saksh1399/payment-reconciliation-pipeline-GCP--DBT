@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: payments
+    database: payment-reconciliation-505309
+    schema: payment_reconciliation
+
+    tables:
+      - name: raw_transactions
+      - name: raw_settlements
+      - name: upi_response

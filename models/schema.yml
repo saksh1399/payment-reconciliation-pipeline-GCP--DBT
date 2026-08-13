@@ -1,0 +1,55 @@
+
+version: 2
+
+models:
+  - name: stg_settlements
+    description: "settlements model"
+    columns:
+      - name: txn_id
+        description: "The primary key for this table"
+        data_tests:
+          - not_null
+
+      - name: settled_amount
+        tests:
+          - not_null
+
+      - name: settlement_date
+        tests:
+          - not_null
+
+  - name: stg_transactions
+    columns:
+      - name: txn_id
+        tests:
+          - not_null
+          - unique
+
+      - name: amount
+        tests:
+          - not_null
+
+      - name: transaction_timestamp
+        tests:
+          - not_null
+
+  - name: stg_upi_responses
+    columns:
+      - name: txn_id
+        tests:
+          - not_null
+
+
+  - name: reconciliation
+    columns:
+      - name: txn_id
+        tests:
+          - not_null
+
+      - name: amount
+        tests:
+          - not_null
+
+  - name: reconciliation_summary
+
+

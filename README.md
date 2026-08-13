@@ -1,0 +1,155 @@
+# Payments Reconciliation Pipeline
+
+## 1. Project Overview
+
+
+payment_reconciliation/
+|
+├── models/
+│   |
+│   ├── sources.yml
+│   ├── schema.yml
+│   |
+│   ├── staging/
+│   │   ├── <stg_transactions_model>.sql
+│   │   ├── <stg_settlements_model>.sql
+│   │   └── <stg_upi_responses_model>.sql
+│   |
+│   ├── intermediate/
+│   │   ├── <check_transaction_quality_model>.sql
+│   │   ├── <deduped_transaction_model>.sql
+│   │   ├── <deduped_settlement_model>.sql
+│   │   ├── <deduped_upi_response_model>.sql
+│   │   └── <reconciliation_model>.sql
+│   |
+│   └── marts/
+│       └── <reconciliation_summary_model>.sql
+│
+├── tests/
+│   └── <success_transaction_reconciliation_test>.sql
+│
+├── dbt_project.yml
+└── README.md
+
+
+This project implements a modular payments reconciliation pipeline using
+Google BigQuery and dbt.
+
+The objective is to reconcile transaction records from an internal
+transaction ledger against bank settlement records and UPI/NPCI response
+data.
+
+The pipeline identifies:
+
+- Successfully reconciled transactions
+- Settlement amount mismatches
+- Missing settlements after the T+1 window
+- Pending settlements
+- Transaction data-quality issues
+- Duplicate transaction and settlement events
+- UPI response failures
+
+The implementation uses SQL, dbt Core, and Google BigQuery.
+
+---
+
+# 2. Business Problem
+
+Payment transactions are generated in an internal transaction system,
+while settlement information is received from banking systems and payment
+response information is received from UPI/NPCI systems.
+
+These systems may contain different records or values because of:
+
+- Duplicate events
+- Partial settlements
+- Settlement delays
+- Amount differences
+- Failed payment responses
+- Missing settlement records
+- Data-quality issues
+
+The objective of this pipeline is to create a reliable reconciliation
+process that combines these sources and produces a business-ready
+reconciliation summary.
+
+---
+
+# 3. Technology Stack
+
+| Component | Technology |
+|---|---|
+| Data Warehouse | Google BigQuery |
+| Transformation | dbt Core |
+| Query Language | SQL / BigQuery SQL |
+| Source Formats | CSV / JSON |
+| Authentication | Google Cloud Application Default Credentials |
+| Testing | dbt tests |
+
+---
+
+# 4. Architecture
+ 
+## 4.1 Current Implementation Architecture
+
+The current implementation uses a batch-oriented architecture using
+BigQuery and dbt.
+
+```text
+                    SOURCE FILES
+                         |
+          +--------------+--------------+
+          |              |              |
+          v              v              v
+   Transactions     Settlements     UPI Responses
+       CSV              CSV              JSON
+          |              |              |
+          +--------------+--------------+
+                         |
+                         v
+                +------------------+
+                |     BigQuery     |
+                |     RAW Layer    |
+                +------------------+
+                         |
+                         v
+                +------------------+
+                |   STAGING Layer  |
+                +------------------+
+                         |
+          +--------------+--------------+
+          |              |              |
+          v              v              v
+     Transactions    Settlements    UPI Responses
+                         |
+                         v
+                +------------------+
+                | INTERMEDIATE      |
+                |     Layer         |
+                +------------------+
+                         |
+          +--------------+--------------+
+          |              |              |
+          v              v              v
+     Data Quality    Deduplication   Settlement
+                                     Aggregation
+                         |
+                         v
+                +------------------+
+                |  Reconciliation   |
+                +------------------+
+                         |
+                         v
+                +------------------+
+                |    MART Layer     |
+                |                  |
+                | reconciliation_  |
+                | summary           |
+                +------------------+
+                         |
+                         v
+                Analysts / BI /
+                Monitoring
+
+
+
