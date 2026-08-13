@@ -151,8 +151,10 @@ BigQuery and dbt.
                 +------------------+
                          |
                          v
-                Analysts / BI /
-                Monitoring
+               ┌─────────────────────┐
+               │      Metabase       │
+               │     Dashboard       │
+               └─────────────────────┘
 
 
 
