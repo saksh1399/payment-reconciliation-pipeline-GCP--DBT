@@ -20,22 +20,22 @@ payment_reconciliation/
 │   ├── schema.yml
 │   |
 │   ├── staging/
-│   │   ├── <stg_transactions_model>.sql
-│   │   ├── <stg_settlements_model>.sql
-│   │   └── <stg_upi_responses_model>.sql
+│   │   ├── stg_transactions.sql
+│   │   ├── stg_settlements.sql
+│   │   └── stg_upi_response.sql
 │   |
 │   ├── intermediate/
-│   │   ├── <check_transaction_quality_model>.sql
-│   │   ├── <deduped_transaction_model>.sql
-│   │   ├── <deduped_settlement_model>.sql
-│   │   ├── <deduped_upi_response_model>.sql
-│   │   └── <reconciliation_model>.sql
+│   │   ├── check_transaction_quality.sql
+│   │   ├── deduped_transaction.sql
+│   │   ├── deduped_settlement.sql
+│   │   ├── deduped_upi_response.sql
+│   │   └── reconciliation.sql
 │   |
 │   └── marts/
-│       └── <reconciliation_summary_model>.sql
+│       └── reconciliation_summary.sql
 │
 ├── tests/
-│   └── <success_transaction_reconciliation_test>.sql
+│   └── success_transaction_reconciliation.sql
 │
 ├── dbt_project.yml
 └── README.md```
